@@ -1,0 +1,14 @@
+{
+  "name": "overtrack.js",
+  "version": "0.0.0",
+  "description": "A node wrapper for OverTrack",
+  "main": "overtrack.js",
+  "keywords": [
+    "overwatch",
+    "overtrack"
+  ],
+  "dependencies": {
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
