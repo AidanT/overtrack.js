@@ -1,23 +1,18 @@
 import rp from 'request-promise';
 
 import * as util from './utils';
-import config from './utils/constants';
+import config from './constants';
 
 export async function player(shareKey, options) {
-  let ot = null;
-  try { ot = await rp({ uri: `${config.api}games/${shareKey}`, json: true }); } catch (e) { return Promise.reject(e); }
+  let overTrack = null;
+  try { overTrack = await rp({ uri: `${config.api}games/${shareKey}`, json: true }); } catch (e) { return Promise.reject(e); }
   return {
     game: async i => {
-      const payload = await rp({ uri: ot.games[i].url, json: true })
-      return {
-        result: payload.result,
-        sr: { start: payload.start_sr, end: payload.end_sr, diff: payload.end_sr - payload.start_sr },
-        map: payload.map,
-        duration: payload.game_duration,
-        battleTag: payload.owner
-      }
+      let json = null;
+      try { json = await rp({ uri: overTrack.games[i].url, json: true }); } catch (e) { return Promise.reject(e); }
+      return util.game(json);
     },
-    games: util.games(ot.games),
+    games: util.games(overTrack.games),
   };
 };
 

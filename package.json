@@ -1,6 +1,6 @@
 {
   "name": "overtrack.js",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "scripts": {
     "test": "gulp test",
     "build": "gulp build",
@@ -8,10 +8,18 @@
   },
   "description": "A node wrapper for OverTrack",
   "main": "dist/overtrack.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aidant/overtrack.js.git"
+  },
   "keywords": [
     "overwatch",
     "overtrack"
   ],
+  "bugs": {
+    "url": "https://github.com/aidant/overtrack.js/issues"
+  },
+  "homepage": "https://github.com/aidant/overtrack.js#readme",
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "request": "^2.81.0",
