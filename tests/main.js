@@ -1,6 +1,10 @@
 const OverTrack = require('../dist/overtrack.js');
 
-    OverTrack('https://api.overtrack.gg/games/eeveea')
-      .then(ot => ot.game(0))
-      .then(console.log)
-      .catch(console.error)
+OverTrack.player('eeveea')
+  .then(ot => { console.log(ot.games[0]); return ot.game(0); })
+  .then(console.log)
+  .catch(console.error);
+
+OverTrack.version()
+  .then(console.log)
+  .catch(console.error);
