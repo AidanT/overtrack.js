@@ -4,10 +4,37 @@ import { _mapToType } from '../const';
 
 const _heroesPlayed = arr => arr.map(val => { return { hero: val[0], percent: val[1] } });
 const _map = json => { return { name: json.map, type: json.map_type || _mapToType(json.map) } };
-const _result = result => result.replace(/loss/i, 'defeat').replace(/win/i, 'victory').replace(/draw/i, 'draw');
+const _result = result => result.replace(/loss/i, 'Defeat').replace(/win/i, 'Victory').replace(/draw/i, 'Draw').replace(/unknown/i, 'Unknown');
 const _score = arr => { return { blue: arr[0], red: arr[1] } };
 const _sr = json => { return { start: json.start_sr, end: json.end_sr, diff: json.end_sr - json.start_sr } };
 const _time = (start, end, length) => { return { start, end: end || start + length, length } };
+
+const _season = time => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
+  if (time < 1467154800) // Tuesday, June 28 at 4:00 pm. PDT (-07:00)
+    return { number: 0, off_season: false, name: 'Competitive Play Preview' }
+  else if (time < 1471478400) // Wednesday, August 17 at 5:00 pm. PDT (-07:00)
+    return { number: 1, off_season: false, name: 'Season 1' }
+  else if (time < 1472776680) // Thursday, September 1 at 5:38 pm. PDT (-07:00)
+    return { number: 2, off_season: true, name: 'Off Season 1-2' }
+  else if (time < 1479945600) // Wednesday, November 23 at 4:00 pm. PST (-08:00)
+    return { number: 2, off_season: false, name: 'Season 2' }
+  else if (time < 1480550400) // Wednesday, November 30 at 4:00 pm. PST (-08:00)
+    return { number: 3, off_season: true, name: 'Off Season 2-3' }
+  else if (time < 1487721600) // Tuesday, February 21 at 4:00 pm. PST (-08:00)
+    return { number: 3, off_season: false, name: 'Season 3' }
+  else if (time < 1488326400) // Tuesday, February 28 at 4:00 pm. PST (-08:00)
+    return { number: 4, off_season: true, name: 'Off Season 3-4' }
+  else if (time < 1496016000) // Sunday, May 28 at 5:00 pm. PDT (-07:00)
+    return { number: 4, off_season: false, name: 'Season 4' }
+  else if (time < 1496275200) // Wednesday, May 31 at 5:00 pm. PDT (-07:00)
+    return { number: 5, off_season: true, name: 'Off Season 4-5' }
+  else if (time < 1503964800) // Monday, August 28 at 5:00 pm. PDT (-07:00)
+    return { number: 5, off_season: false, name: 'Season 5' }
+  else if (time < 1504224000) // Thursday, August 31 at 5:00 pm. PDT (-07:00)
+    return { number: 6, off_season: true, name: 'Off Season 5-6' }
+  else
+    return { number: 6, off_season: false, name: 'Season 6' }
+};
 
 // killfeed
 
@@ -73,6 +100,7 @@ export const _games = arr => arr.map(val => {
     result: _result(val.result),
     rank: val.rank,
     score: _score(val.score),
+    season: _season(val.time),
     sr: _sr(val),
     time: _time(val.time, null, val.duration), // time.end is not correct.
     user_id: val.user_id,
@@ -85,6 +113,7 @@ export const _game = json => {
     battleTag: json.owner,
     custom_game: json.custom_game,
     group_size: json.group_size,
+    hero_statistics: json.hero_statistics,
     heroes_played: _heroesPlayed(json.heroes_played),
     key: json.key,
     killfeed: _killfeed(json),
@@ -93,6 +122,7 @@ export const _game = json => {
     result: _result(json.result),
     rank: json.teams.blue[0].rank,
     score: _score(json.score),
+    season: _season(json.game_started),
     sr: _sr(json),
     tab_statistics: _tab_statistics(json.tab_statistics),
     teams: {
