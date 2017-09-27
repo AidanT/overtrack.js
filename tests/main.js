@@ -5,5 +5,5 @@ OverTrack.player('eeveea')
     console.log(ot.games[0])
     return ot.game(0);
   })
-  .then(console.log)
+  .then(g => console.log(g.hero_statistics.mercy.specific))
   .catch(console.error)

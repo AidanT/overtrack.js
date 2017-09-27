@@ -1,4 +1,5 @@
 import { _mapToType } from '../const';
+import heroStats from '../const/heroStats.json';
 
 // shared functions
 
@@ -8,6 +9,39 @@ const _result = result => result.replace(/loss/i, 'Defeat').replace(/win/i, 'Vic
 const _score = arr => { return { blue: arr[0], red: arr[1] } };
 const _sr = json => { return { start: json.start_sr, end: json.end_sr, diff: json.end_sr - json.start_sr } };
 const _time = (start, end, length) => { return { start, end: end || start + length, length } };
+
+const _specific = (json, hero) => {
+  const arr = [];
+  if (typeof json.hero_stat_1 == 'number') arr.push({ value: json.hero_stat_1, name: heroStats[hero][0] });
+  if (typeof json.hero_stat_3 == 'number') arr.push({ value: json.hero_stat_3, name: heroStats[hero][2] });
+  if (typeof json.hero_stat_5 == 'number') arr.push({ value: json.hero_stat_5, name: heroStats[hero][4] });
+  if (typeof json.hero_stat_2 == 'number') arr.push({ value: json.hero_stat_2, name: heroStats[hero][1] });
+  if (typeof json.hero_stat_4 == 'number') arr.push({ value: json.hero_stat_4, name: heroStats[hero][3] });
+  if (typeof json.hero_stat_6 == 'number') arr.push({ value: json.hero_stat_6, name: heroStats[hero][5] });
+  return arr;
+}
+
+const _hero_statistics = h => {
+  const result = {};
+  if (h.ALL) {
+    h.all = h.ALL;
+    delete h.ALL;
+  }
+  Object.keys(h).forEach(key => {
+    result[key] = {
+      elims: h[key].elims,
+      damage: h[key].damage,
+      objective_kills: h[key].objective_kills,
+      healing: h[key].healing,
+      objective_time: h[key].objective_time,
+      deaths: h[key].deaths,
+      tab_health: h[key].tab_health,
+      time_played: h[key].time_played,
+      specific: _specific(h[key], key)
+    }
+  })
+  return result;
+};
 
 const _season = time => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
   if (time < 1467154800) // Tuesday, June 28 at 4:00 pm. PDT (-07:00)
@@ -110,10 +144,10 @@ export const _games = arr => arr.map(val => {
 
 export const _game = json => {
   return {
-    battleTag: json.owner,
+    battle_tag: json.owner,
     custom_game: json.custom_game,
     group_size: json.group_size,
-    hero_statistics: json.hero_statistics,
+    hero_statistics: _hero_statistics(json.hero_statistics),
     heroes_played: _heroesPlayed(json.heroes_played),
     key: json.key,
     killfeed: _killfeed(json),

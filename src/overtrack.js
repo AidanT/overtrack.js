@@ -3,7 +3,7 @@ import rp from 'request-promise';
 import * as util from './utils';
 import config from './const';
 
-export async function player(shareKey, options) {
+const player = async (shareKey, options) => {
   let overTrack = null;
   try { overTrack = await rp({ uri: `${config.api}games/${shareKey}`, json: true }); } catch (e) { return Promise.reject(e); }
   return {
@@ -16,14 +16,20 @@ export async function player(shareKey, options) {
   };
 };
 
-export async function version() {
+const version = async () => {
   let payload = null;
   try { payload = await rp({ uri: `${config.api}client_version` }); } catch (e) { return Promise.reject(e); }
   return payload.slice(29);
 }
 
-export async function game(url) {
+const game = async url => {
   let json = null;
   try { json = await rp({ uri: url, json: true }); } catch (e) { return Promise.reject(e); }
   return util._game(json);
+}
+
+export default {
+  player,
+  version,
+  game
 }
