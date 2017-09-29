@@ -1,8 +1,8 @@
 {
   "name": "overtrack.js",
-  "version": "0.0.5-alpha",
+  "version": "0.1.0-alpha",
   "scripts": {
-    "test": "gulp test",
+    "start": "gulp test",
     "build": "gulp build",
     "prepublish": "npm run build"
   },

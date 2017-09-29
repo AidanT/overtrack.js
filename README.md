@@ -10,11 +10,11 @@ npm install --save overtrack.js
 ```js
 const OverTrack = require('overtrack.js')
 
-OverTrack.player('eeveea')
-  .then(ot => {
-    console.log(ot.games[0])
-    return ot.game(0)
-  })
+OverTrack.stats('eeveea')
+  .then(console.log)
+  .catch(console.error)
+
+OverTrack.version()
   .then(console.log)
   .catch(console.error)
 ```

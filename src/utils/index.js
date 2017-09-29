@@ -1,16 +1,65 @@
-import { _mapToType } from '../const';
+import rp from 'request-promise';
+
+import config from '../const';
 import heroStats from '../const/heroStats.json';
+
+export const _get = (endpoint, url) => new Promise((resolve, reject) =>
+  rp({
+    url: encodeURI(`${url ? '' : config.api}${endpoint}`),
+    json: true,
+    //resolveWithFullResponse: true,
+    //simple: false
+  })
+    .then(resolve)
+    .catch(e => reject('OverTrack API request failed'))
+);
 
 // shared functions
 
-const _heroesPlayed = arr => arr.map(val => { return { hero: val[0], percent: val[1] } });
-const _map = json => { return { name: json.map, type: json.map_type || _mapToType(json.map) } };
-const _result = result => result.replace(/loss/i, 'Defeat').replace(/win/i, 'Victory').replace(/draw/i, 'Draw').replace(/unknown/i, 'Unknown');
-const _score = arr => { return { blue: arr[0], red: arr[1] } };
-const _sr = json => { return { start: json.start_sr, end: json.end_sr, diff: json.end_sr - json.start_sr } };
-const _time = (start, end, length) => { return { start, end: end || start + length, length } };
+export const _heroesPlayed = arr => arr.map(val => { return { hero: val[0], percent: val[1] } });
+export const _map = json => { return { name: json.map, type: json.map_type || config._mapToType(json.map) } };
+export const _score = arr => { return { blue: arr[0], red: arr[1] } };
+export const _sr = json => { return { start: json.start_sr, end: json.end_sr, diff: json.end_sr - json.start_sr } };
+export const _time = (start, end, length) => { return { start, end: end || start + length, length } };
 
-const _specific = (json, hero) => {
+const _result = (result, red) => {
+  if (red)
+    return result.replace(/loss/i, 'Victory').replace(/win/i, 'Defeat').replace(/draw/i, 'Draw').replace(/unknown/i, 'Unknown')
+  else
+    return result.replace(/loss/i, 'Defeat').replace(/win/i, 'Victory').replace(/draw/i, 'Draw').replace(/unknown/i, 'Unknown')
+};
+
+export const _teams= json => {
+  if (json.teams) {
+    return {
+      blue: {
+        score: json.score[0],
+        outcome: _result(json.result),
+        sr: json.avg_sr[0],
+        players: json.teams.blue
+      },
+      red: {
+        score: json.score[1],
+        outcome: _result(json.result, true),
+        sr: json.avg_sr[1],
+        players: json.teams.blue
+      }
+    }
+  } else {
+    return {
+      blue: {
+        score: json.score[0],
+        outcome: _result(json.result)
+      },
+      red: {
+        score: json.score[1],
+        outcome: _result(json.result, true)
+      }
+    }
+  }
+}
+
+export const _specific = (json, hero) => {
   const arr = [];
   if (typeof json.hero_stat_1 == 'number') arr.push({ value: json.hero_stat_1, name: heroStats[hero][0] });
   if (typeof json.hero_stat_3 == 'number') arr.push({ value: json.hero_stat_3, name: heroStats[hero][2] });
@@ -21,7 +70,7 @@ const _specific = (json, hero) => {
   return arr;
 }
 
-const _hero_statistics = h => {
+export const _hero_statistics = h => {
   const result = {};
   if (h.ALL) {
     h.all = h.ALL;
@@ -43,7 +92,7 @@ const _hero_statistics = h => {
   return result;
 };
 
-const _season = time => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
+export const _season = time => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
   if (time < 1467154800) // Tuesday, June 28 at 4:00 pm. PDT (-07:00)
     return { number: 0, off_season: false, name: 'Competitive Play Preview' }
   else if (time < 1471478400) // Wednesday, August 17 at 5:00 pm. PDT (-07:00)
@@ -72,12 +121,12 @@ const _season = time => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM
 
 // killfeed
 
-const _killicon = killicon => {
+export const _killicon = killicon => {
   if (!killicon) return null;
   return { hero: killicon[0], ability: killicon[1] }
 };
 
-const _killfeed = json => json.killfeed.map(val => {
+export const _killfeed = json => json.killfeed.map(val => {
   const resurrect = Boolean(val[1] & 2);
   const is_left_blue = Boolean(val[1] & 1);
   if (resurrect)
@@ -100,7 +149,7 @@ const _killfeed = json => json.killfeed.map(val => {
 
 // tab_statistics
 
-const _tab_statistics = val => {
+export const _tab_statistics = val => {
   const result = [];
   for (var i = 0; i < val.hero.length; i++) {
     result[i] = {
@@ -121,55 +170,3 @@ const _tab_statistics = val => {
   }
   return result;
 };
-
-// methods
-
-export const _games = arr => arr.map(val => {
-  return {
-    custom_game: val.custom_game,
-    heroes_played: _heroesPlayed(val.heroes_played),
-    key: val.key,
-    map: _map(val),
-    player: val.player_name,
-    result: _result(val.result),
-    rank: val.rank,
-    score: _score(val.score),
-    season: _season(val.time),
-    sr: _sr(val),
-    time: _time(val.time, null, val.duration), // time.end is not correct.
-    user_id: val.user_id,
-    url: val.url
-  };
-});
-
-export const _game = json => {
-  return {
-    battle_tag: json.owner,
-    custom_game: json.custom_game,
-    group_size: json.group_size,
-    hero_statistics: _hero_statistics(json.hero_statistics),
-    heroes_played: _heroesPlayed(json.heroes_played),
-    key: json.key,
-    killfeed: _killfeed(json),
-    map: _map(json),
-    player: json.player,
-    result: _result(json.result),
-    rank: json.teams.blue[0].rank,
-    score: _score(json.score),
-    season: _season(json.game_started),
-    sr: _sr(json),
-    tab_statistics: _tab_statistics(json.tab_statistics),
-    teams: {
-      blue: {
-        average_sr: json.avg_sr[0],
-        players: json.teams.blue
-      },
-      red: {
-        average_sr: json.avg_sr[1],
-        players: json.teams.red
-      }
-    },
-    time: _time(json.game_started, json.game_ended, json.game_duration),
-    user_id: json.user_id
-  }
-}

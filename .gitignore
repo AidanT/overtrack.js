@@ -57,5 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
-# Gulp output directory 
+# Gulp output directory
 dist
+
+# npm lock file
+package-lock.json
