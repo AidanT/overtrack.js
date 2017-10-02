@@ -21,5 +21,9 @@ export default {
   async version() {
     const v = await _api('/client_version')
     return { message: v, number: v.slice(29) }
+  },
+  async sr(key) {
+    const rank = await _api(`/sr/${key}`)
+    return Number(rank)
   }
 }

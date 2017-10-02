@@ -1,6 +1,40 @@
 import heroStats from '../const/heroStats';
 import maps from '../const/maps';
 
+export const _hero_specific = (json, hero) => {
+  const arr = [];
+  if (typeof json.hero_stat_1 == 'number') arr.push({ value: json.hero_stat_1, name: heroStats[hero][0] });
+  if (typeof json.hero_stat_3 == 'number') arr.push({ value: json.hero_stat_3, name: heroStats[hero][2] });
+  if (typeof json.hero_stat_5 == 'number') arr.push({ value: json.hero_stat_5, name: heroStats[hero][4] });
+  if (typeof json.hero_stat_2 == 'number') arr.push({ value: json.hero_stat_2, name: heroStats[hero][1] });
+  if (typeof json.hero_stat_4 == 'number') arr.push({ value: json.hero_stat_4, name: heroStats[hero][3] });
+  if (typeof json.hero_stat_6 == 'number') arr.push({ value: json.hero_stat_6, name: heroStats[hero][5] });
+  return arr;
+}
+
+export const _hero_statistics = game => {
+  const hero = game.hero_statistics;
+  const result = {};
+  if (hero.ALL) {
+    hero.all = hero.ALL;
+    delete hero.ALL;
+  }
+  Object.keys(hero).forEach(key => {
+    result[key] = {
+      elims: hero[key].elims,
+      damage: hero[key].damage,
+      objective_kills: hero[key].objective_kills,
+      healing: hero[key].healing,
+      objective_time: hero[key].objective_time,
+      deaths: hero[key].deaths,
+      tab_health: hero[key].tab_health,
+      time_played: hero[key].time_played,
+      specific: _hero_specific(hero[key], key)
+    }
+  })
+  return result;
+};
+
 export const _heroes_played = game => game.heroes_played.map(x => {
   return {
     hero: x[0],
@@ -28,7 +62,7 @@ export const _killfeed = game => game.killfeed.map(x => {
       timestamp: x[0]
     }
   }
-})
+}).sort((x, y) => x.timestamp - y.timestamp)
 
 export const _map = game => {
   return {
@@ -97,6 +131,19 @@ export const _sr = (game, simple) => {
     end: game.end_sr,
     name: game.rank || (simple ? simple.rank : null),
     start: game.start_sr
+  }
+}
+
+export const _teams = game => {
+  return {
+    blue: {
+      sr: game.avg_sr[0],
+      players: game.teams.blue
+    },
+    red: {
+      sr: game.avg_sr[1],
+      players: game.teams.red
+    }
   }
 }
 
