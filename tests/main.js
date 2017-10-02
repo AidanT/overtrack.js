@@ -1,6 +1,17 @@
-const ot = require('../dist/overtrack.js');
+const ot = require('../dist');
 
-ot.stats('eeveea')
-  .then(game => game[0].detailed())
+// latest client version
+ot.version()
   .then(console.log)
+  .catch(console.error)
+
+// simple endpoint for getting current sr
+ot.sr('eeveea')
+  .then(sr => console.log('Current Skill Rating:', sr))
+  .catch(console.error)
+
+// main endpoint
+ot.user('eeveea')
+  .then(games => games[0].detailed())
+  .then(game => console.log(game.teams))
   .catch(console.error)

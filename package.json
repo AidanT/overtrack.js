@@ -1,13 +1,13 @@
 {
   "name": "overtrack.js",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "scripts": {
     "start": "gulp test",
     "build": "gulp build",
     "prepublish": "npm run build"
   },
   "description": "A node wrapper for OverTrack",
-  "main": "dist/overtrack.js",
+  "main": "dist",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aidant/overtrack.js.git"
@@ -21,9 +21,8 @@
   },
   "homepage": "https://github.com/aidant/overtrack.js#readme",
   "dependencies": {
-    "babel-runtime": "^6.26.0",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "axios": "^0.16.2",
+    "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",

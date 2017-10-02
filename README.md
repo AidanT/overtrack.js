@@ -8,13 +8,21 @@ npm install --save overtrack.js
 ```
 ### Usage
 ```js
-const OverTrack = require('overtrack.js')
+const ot = require('overtrack.js');
 
-OverTrack.stats('eeveea')
+// latest client version
+ot.version()
   .then(console.log)
   .catch(console.error)
 
-OverTrack.version()
-  .then(console.log)
+// simple endpoint for getting current sr
+ot.sr('eeveea')
+  .then(sr => console.log('Current Skill Rating:', sr))
+  .catch(console.error)
+
+// main endpoint
+ot.user('eeveea')
+  .then(games => games[0].detailed())
+  .then(game => console.log(game))
   .catch(console.error)
 ```
