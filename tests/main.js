@@ -6,12 +6,12 @@ ot.version()
   .catch(console.error)
 
 // simple endpoint for getting current sr
-ot.sr('eeveea')
+ot.sr('ottr')
   .then(sr => console.log('Current Skill Rating:', sr))
   .catch(console.error)
 
 // main endpoint
-ot.user('eeveea')
+ot.user('ottr')
   .then(games => games[0].detailed())
-  .then(game => console.log(game.teams))
+  .then(game => console.log(game))
   .catch(console.error)

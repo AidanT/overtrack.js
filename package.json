@@ -1,13 +1,13 @@
 {
   "name": "overtrack.js",
-  "version": "0.2.0-alpha",
+  "version": "0.2.2-alpha",
   "scripts": {
     "start": "gulp test",
     "build": "gulp build",
     "prepublish": "npm run build"
   },
   "description": "A node wrapper for OverTrack",
-  "main": "dist",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aidant/overtrack.js.git"

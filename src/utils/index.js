@@ -85,6 +85,7 @@ export const _misc = (game, simple) => {
 }
 
 export const _result = game => {
+  if (!game.score) game.score = [null, null];
   return {
     blue: {
       score: game.score[0],
