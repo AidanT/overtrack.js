@@ -1,6 +1,7 @@
 import _api from './api'
 import _detailed from './structures/detailed'
 import _simple from './structures/simple'
+import _lastMatch from './structures/lastMatch'
 
 export default {
   async user (key) {
@@ -19,11 +20,15 @@ export default {
     })
   },
   async version () {
-    const v = await _api('/client_version')
-    return { message: v, number: v.slice(29) }
+    const version = await _api('/client_version')
+    return { message: version, number: version.slice(29) }
   },
   async sr (key) {
     const rank = await _api(`/sr/${key}`)
     return Number(rank)
+  },
+  async lastMatch (key) {
+    const x = await _api(`/last_match/${key}`)
+    return _lastMatch(x)
   }
 }
