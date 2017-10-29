@@ -1,4 +1,4 @@
-const ot = require('../dist');
+const ot = require('../dist')
 
 // latest client version
 ot.version()
@@ -13,5 +13,5 @@ ot.sr('ottr')
 // main endpoint
 ot.user('ottr')
   .then(games => games[0].detailed())
-  .then(game => console.log(game))
+  .then(game => console.log(require('util').inspect(game, { depth: null })))
   .catch(console.error)

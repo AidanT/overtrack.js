@@ -6,9 +6,10 @@
 ```shell
 npm install --save overtrack.js
 ```
+
 ### Usage
 ```js
-const ot = require('overtrack.js');
+const ot = require('overtrack.js')
 
 // latest client version
 ot.version()
@@ -26,3 +27,7 @@ ot.user('eeveea')
   .then(game => console.log(game))
   .catch(console.error)
 ```
+
+### Development
+#### Linter
+[JavaScript Standard Style](https://standardjs.com/#are-there-text-editor-plugins)

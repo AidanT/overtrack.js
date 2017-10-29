@@ -1,31 +1,31 @@
-import del from 'del';
-import gulp from 'gulp';
-import gulpLoadPlugins from 'gulp-load-plugins';
-import path from 'path';
-import runSequence from 'run-sequence';
+import del from 'del'
+import gulp from 'gulp'
+import gulpLoadPlugins from 'gulp-load-plugins'
+import path from 'path'
+import runSequence from 'run-sequence'
 
-const p = gulpLoadPlugins();
+const p = gulpLoadPlugins()
 const files = {
-  js: ['./**/*.js', '!dist/**', '!node_modules/**'],
-  other: ['./**/*.png', './**/*.jpg', './**/*.html', './**/*.json', '!dist/**', '!tests/**', '!node_modules/**']
-};
+  js: ['./src/**/*.js'],
+  other: ['./src/**/*.png', './src/**/*.jpg', './src/**/*.html', './src/**/*.json']
+}
 
 gulp.task('rm', () =>
   del(['dist/**', '!dist'])
-);
+)
 
 gulp.task('cp', () =>
   gulp.src(files.other, { base: './src' })
     .pipe(p.newer('dist'))
     .pipe(gulp.dest('dist'))
-);
+)
 
 gulp.task('babel', () =>
-  gulp.src([...files.js, '!gulpfile.babel.js'], { base: './src' })
+  gulp.src(files.js, { base: './src' })
     .pipe(p.newer('dist'))
     .pipe(p.babel())
     .pipe(gulp.dest('dist'))
-);
+)
 
 gulp.task('nodemon', ['cp', 'babel'], () =>
   p.nodemon({
@@ -34,7 +34,7 @@ gulp.task('nodemon', ['cp', 'babel'], () =>
     script: path.join('tests', 'main.js'),
     tasks: ['cp', 'babel']
   })
-);
+)
 
-gulp.task('test', ['rm'], () => runSequence('nodemon'));
-gulp.task('build', ['rm'], () => runSequence(['cp', 'babel']));
+gulp.task('test', ['rm'], () => runSequence('nodemon'))
+gulp.task('build', ['rm'], () => runSequence(['cp', 'babel']))

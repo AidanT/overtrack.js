@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export default (endpoint) => new Promise((resolve, reject) => {
   axios.get(endpoint, {
@@ -6,5 +6,5 @@ export default (endpoint) => new Promise((resolve, reject) => {
     validateStatus: status => status >= 200 && status < 300
   })
     .then(res => resolve(res.data))
-    .catch(e => reject('Failed to connect to OverTrack API'))
-});
+    .catch(e => reject(new Error('Failed to connect to OverTrack API')))
+})

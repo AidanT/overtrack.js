@@ -1,9 +1,9 @@
-import * as utils from '../utils';
+import * as utils from '../utils'
 
 export default (game, simple) => {
   return {
-    hero_statistics: utils._hero_statistics(game),
-    heroes_played: utils._heroes_played(game),
+    heroStatistics: utils._heroStatistics(game),
+    heroesPlayed: utils._heroesPlayed(game),
     killfeed: utils._killfeed(game),
     map: utils._map(game),
     misc: utils._misc(game, simple),
