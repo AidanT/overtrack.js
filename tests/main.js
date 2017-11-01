@@ -1,7 +1,7 @@
-const ot = require('../dist')
+const ot = require('../src')
 
 // // latest client version
-// ot.version()
+// ot.clientVersion()
 //   .then(console.log)
 //   .catch(console.error)
 //
@@ -10,12 +10,12 @@ const ot = require('../dist')
 //   .then(sr => console.log('Current Skill Rating:', sr))
 //   .catch(console.error)
 //
-// // main endpoint
-// ot.user('ottr')
-//   .then(games => games[0])
-//   .then(game => console.log(require('util').inspect(game, { depth: null })))
-//   .catch(console.error)
-
-ot.lastMatch('ane')
-  .then(console.log)
+// main endpoint
+ot.player('ane')
+  .then(games => games[0].detailed())
+  .then(game => console.log(require('util').inspect(game, { depth: null })))
   .catch(console.error)
+//
+// ot.lastMatch('ane')
+//   .then(console.log)
+//   .catch(console.error)

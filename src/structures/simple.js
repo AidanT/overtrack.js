@@ -1,6 +1,6 @@
-import * as utils from '../utils'
+const utils = require('../utils')
 
-export default game => {
+module.exports = game => {
   return {
     heroesPlayed: utils._heroesPlayed(game),
     map: utils._map(game),

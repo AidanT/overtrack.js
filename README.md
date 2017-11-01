@@ -12,7 +12,7 @@ npm install --save overtrack.js
 const ot = require('overtrack.js')
 
 // latest client version
-ot.version()
+ot.clientversion()
   .then(console.log)
   .catch(console.error)
 
@@ -22,7 +22,7 @@ ot.sr('eeveea')
   .catch(console.error)
 
 // main endpoint
-ot.user('eeveea')
+ot.player('eeveea')
   .then(games => games[0].detailed())
   .then(game => console.log(game))
   .catch(console.error)

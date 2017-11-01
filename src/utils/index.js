@@ -1,7 +1,7 @@
-import heroStats from '../const/heroStats'
-import maps from '../const/maps'
+const heroStats = require('../const/heroStats')
+const maps = require('../const/maps')
 
-export const _heroSpecific = (json, hero) => {
+const _heroSpecific = (json, hero) => {
   const arr = []
   if (typeof json.hero_stat_1 === 'number') arr.push({ value: json.hero_stat_1, name: heroStats[hero][0] })
   if (typeof json.hero_stat_3 === 'number') arr.push({ value: json.hero_stat_3, name: heroStats[hero][2] })
@@ -12,7 +12,7 @@ export const _heroSpecific = (json, hero) => {
   return arr
 }
 
-export const _heroStatistics = game => {
+exports._heroStatistics = game => {
   const hero = game.hero_statistics
   const result = {}
   if (hero.ALL) {
@@ -35,14 +35,14 @@ export const _heroStatistics = game => {
   return result
 }
 
-export const _heroesPlayed = game => game.heroes_played.map(x => {
+exports._heroesPlayed = game => game.heroes_played.map(x => {
   return {
     hero: x[0],
     percent: x[1]
   }
 }).sort((x, y) => y.percent - x.percent)
 
-export const _killfeed = game => game.killfeed.map(x => {
+exports._killfeed = game => game.killfeed.map(x => {
   const resurrect = Boolean(x[1] & 2)
   const isLeftBlue = Boolean(x[1] & 1)
   if (resurrect) {
@@ -64,14 +64,14 @@ export const _killfeed = game => game.killfeed.map(x => {
   }
 }).sort((x, y) => x.timestamp - y.timestamp)
 
-export const _map = game => {
+exports._map = game => {
   return {
     name: game.map,
     type: maps[game.map]
   }
 }
 
-export const _misc = (game, simple) => {
+exports._misc = (game, simple) => {
   return {
     customGame: game.custom_game !== undefined ? game.custom_game : null,
     key: game.key || null,
@@ -84,7 +84,12 @@ export const _misc = (game, simple) => {
   }
 }
 
-export const _result = game => {
+// TODO: Write this function
+exports._objectiveStages = game => {
+  return game.objective_stages
+}
+
+exports._result = game => {
   if (!game.score) game.score = [null, null]
   return {
     blue: {
@@ -98,8 +103,9 @@ export const _result = game => {
   }
 }
 
-export const _season = game => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
-  const time = game.time
+exports._season = game => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
+  const time = game.time || game.game_started
+  // 1459965600 == Competitive Play Preview
   if (time < 1467154800) { // Tuesday, June 28 at 4:00 pm. PDT (-07:00)
     return { name: 'Competitive Play Preview', number: 0, offSeason: false }
   } else if (time < 1471478400) { // Wednesday, August 17 at 5:00 pm. PDT (-07:00)
@@ -122,12 +128,16 @@ export const _season = game => { // Timezone: 'America/Los_Angeles' Format: 'ddd
     return { name: 'Season 5', number: 5, offSeason: false }
   } else if (time < 1504224000) { // Thursday, August 31 at 5:00 pm. PDT (-07:00)
     return { name: 'Off Season 5-6', number: 6, offSeason: true }
-  } else {
+  } else if (time < 1509235200) { // Saturday, October 28 at 5:00 pm. PDT (-07:00)
     return { name: 'Season 6', number: 6, offSeason: false }
+  } else if (time < 1509494400) { // Tuesday, October 31 at 5:00 pm. PDT (-07:00)
+    return { name: 'Off Season 6-7', number: 7, offSeason: true }
+  } else {
+    return { name: 'Season 7', number: 7, offSeason: false }
   }
 }
 
-export const _sr = (game, simple) => {
+exports._sr = (game, simple) => {
   return {
     diff: game.end_sr - game.start_sr,
     end: game.end_sr,
@@ -136,7 +146,7 @@ export const _sr = (game, simple) => {
   }
 }
 
-export const _teams = game => {
+exports._teams = game => {
   return {
     blue: {
       sr: game.avg_sr[0],
@@ -149,7 +159,7 @@ export const _teams = game => {
   }
 }
 
-export const _time = game => {
+exports._time = game => {
   return {
     start: game.game_started || game.time,
     end: game.game_ended || null,

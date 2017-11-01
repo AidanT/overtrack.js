@@ -1,6 +1,6 @@
-import * as utils from '../utils'
+const utils = require('../utils')
 
-export default message => {
+module.exports = message => {
   const tmp = /(WIN|LOSS|DRAW) on ([a-zA-Z:'0-9 ]+) \| ([0-9]{4}) → ([0-9]{4}) \(\+?(-?[0-9]{1,4})\) \| (.+)/.exec(message)
   const key = tmp[6].match(/([^/]{3,12}-[0-9]{4,6}\/[0-9-a-zA-Z]+)/)[1]
   const srName = [
