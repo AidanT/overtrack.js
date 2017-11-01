@@ -11,11 +11,15 @@ const ot = require('../src')
 //   .catch(console.error)
 //
 // main endpoint
-ot.player('ane')
-  .then(games => games[0].detailed())
-  .then(game => console.log(require('util').inspect(game, { depth: null })))
-  .catch(console.error)
-//
-// ot.lastMatch('ane')
-//   .then(console.log)
+// ot.player('ane')
+//   .then((games) => games[0])
+//   .then((game) => console.log(require('util').inspect(game, { depth: null })))
 //   .catch(console.error)
+
+ot.lastMatch('ottr', true)
+  .then(game => {
+    console.log(game)
+    return game.detailed()
+  })
+  .then(game => console.log(game))
+  .catch(console.error)

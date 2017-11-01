@@ -3,6 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/aidant/overtrack.js.svg)](https://github.com/aidant/overtrack.js/issues)
 
 ### Installation
+##### Node 8.x is required
 ```shell
 npm install --save overtrack.js
 ```
@@ -11,19 +12,27 @@ npm install --save overtrack.js
 ```js
 const ot = require('overtrack.js')
 
-// latest client version
-ot.clientversion()
+ot.clientVersion()
   .then(console.log)
   .catch(console.error)
 
-// simple endpoint for getting current sr
 ot.sr('eeveea')
   .then(sr => console.log('Current Skill Rating:', sr))
   .catch(console.error)
 
-// main endpoint
 ot.player('eeveea')
-  .then(games => games[0].detailed())
+  .then(games => {
+    console.log(games[0])
+    return games[0].detailed()
+  })
+  .then(game => console.log(game))
+  .catch(console.error)
+
+ot.lastMatch('eeveea')
+  .then(game => {
+    console.log(game)
+    return game.detailed()
+  })
   .then(game => console.log(game))
   .catch(console.error)
 ```

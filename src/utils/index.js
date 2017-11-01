@@ -12,14 +12,14 @@ const _heroSpecific = (json, hero) => {
   return arr
 }
 
-exports._heroStatistics = game => {
+exports._heroStatistics = (game) => {
   const hero = game.hero_statistics
   const result = {}
   if (hero.ALL) {
     hero.all = hero.ALL
     delete hero.ALL
   }
-  Object.keys(hero).forEach(key => {
+  Object.keys(hero).forEach((key) => {
     result[key] = {
       elims: hero[key].elims,
       damage: hero[key].damage,
@@ -35,7 +35,7 @@ exports._heroStatistics = game => {
   return result
 }
 
-exports._heroesPlayed = game => game.heroes_played.map(x => {
+exports._heroesPlayed = (game) => game.heroes_played.map(x => {
   return {
     hero: x[0],
     percent: x[1]
@@ -64,7 +64,7 @@ exports._killfeed = game => game.killfeed.map(x => {
   }
 }).sort((x, y) => x.timestamp - y.timestamp)
 
-exports._map = game => {
+exports._map = (game) => {
   return {
     name: game.map,
     type: maps[game.map]
@@ -85,11 +85,11 @@ exports._misc = (game, simple) => {
 }
 
 // TODO: Write this function
-exports._objectiveStages = game => {
+exports._objectiveStages = (game) => {
   return game.objective_stages
 }
 
-exports._result = game => {
+exports._result = (game) => {
   if (!game.score) game.score = [null, null]
   return {
     blue: {
@@ -103,7 +103,7 @@ exports._result = game => {
   }
 }
 
-exports._season = game => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
+exports._season = (game) => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MMMM D [at] h:mm a. z (Z)'
   const time = game.time || game.game_started
   // 1459965600 == Competitive Play Preview
   if (time < 1467154800) { // Tuesday, June 28 at 4:00 pm. PDT (-07:00)
@@ -138,15 +138,16 @@ exports._season = game => { // Timezone: 'America/Los_Angeles' Format: 'dddd, MM
 }
 
 exports._sr = (game, simple) => {
+  const name = game.rank || (simple ? simple.rank : null)
   return {
-    diff: game.end_sr - game.start_sr,
-    end: game.end_sr,
-    name: game.rank || (simple ? simple.rank : null),
-    start: game.start_sr
+    diff: name === 'placement' ? game.end_sr - game.start_sr : 0,
+    end: game.end_sr || null,
+    name,
+    start: game.start_sr || null
   }
 }
 
-exports._teams = game => {
+exports._teams = (game) => {
   return {
     blue: {
       sr: game.avg_sr[0],
@@ -159,7 +160,7 @@ exports._teams = game => {
   }
 }
 
-exports._time = game => {
+exports._time = (game) => {
   return {
     start: game.game_started || game.time,
     end: game.game_ended || null,

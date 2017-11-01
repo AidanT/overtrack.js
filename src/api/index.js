@@ -1,14 +1,5 @@
 const axios = require('axios')
 
-// module.exports = (endpoint) => new Promise((resolve, reject) => {
-//   axios.get(endpoint, {
-//     baseURL: 'https://api.overtrack.gg/',
-//     validateStatus: status => status >= 200 && status < 300
-//   })
-//     .then(res => resolve(res.data))
-//     .catch(e => reject(new Error('Failed to connect to OverTrack API')))
-// })
-
 const api = module.exports = axios.create({
   baseURL: 'https://api.overtrack.gg/',
   validateStatus: status => status === 200
