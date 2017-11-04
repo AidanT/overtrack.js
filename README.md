@@ -19,20 +19,21 @@ ot.player('eeveea')
 ```
 
 <hr>
+
 ###### NOTE
 I plan on writing better docs before release.
 ## Methods
 ###### NOTE
-**All methods return Promises**
+<!-- **All methods return Promises** -->
 
-##### [ot.player(key)](#otplayerkey)
-##### [ot.sr(key[, options])](#otsrkey-options)
-##### [ot.clientVersion()](#otclientversion)
-##### [ot.lastMatch(key)](#otlastmatchkey)
+[ot.player(key)](#otplayerkey)<br>
+[ot.sr(key[, options])](#otsrkey-options)<br>
+[ot.clientVersion()](#otclientversion)<br>
+[ot.lastMatch(key)](#otlastmatchkey)<br>
 
 <hr>
 
-### `ot.player(key)`
+### `player(key)`
 ##### Returns: [Simple game object.](#simple)
 ##### Example:
 ```js
@@ -48,7 +49,7 @@ ot.player('eeveea')
 
 <hr>
 
-### `ot.sr(key[, options])`
+### `sr(key[, options])`
 ##### `options`
 * **multipleAccounts:** `Boolean` Default: `false`
 
