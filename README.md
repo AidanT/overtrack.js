@@ -117,7 +117,7 @@ ot.lastMatch('eeveea')
 ### `simple`
 
 * `detailed`
- * Function, Returns: Promise<[Detailed game object](#detailed)>
+  * Function, Returns: Promise<[Detailed game object](#detailed)>
 * [`heroesPlayed`](#heroesplayed)
 * [`map`](#map)
 * [`misc`](#misc)
