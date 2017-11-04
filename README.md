@@ -24,10 +24,11 @@ I plan on writing better docs before release.
 ## Methods
 ###### NOTE
 **All methods return Promises**
-##### [ot.player(key)](#otplayer)
-##### [ot.sr(key[, options])](#otsr)
+
+##### [ot.player(key)](#otplayerkey)
+##### [ot.sr(key[, options])](#otsrkey-options)
 ##### [ot.clientVersion()](#otclientversion)
-##### [ot.lastMatch(key)](#otlastmatch)
+##### [ot.lastMatch(key)](#otlastmatchkey)
 
 <hr>
 
