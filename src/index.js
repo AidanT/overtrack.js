@@ -17,13 +17,18 @@ const ot = module.exports = {
     }))
   },
   async clientVersion () {
-    const version = await _api('/client_version')
-    return { message: version, number: version.slice(29) }
+    const message = await _api('/client_version')
+    return { message, number: message.slice(29) }
   },
-  async sr (key, multipleAccounts = false) {
+  async sr (key, { multipleAccounts } = { multipleAccounts: false }) {
     const rank = await _api(`/sr/${key}?multiple_accounts=${multipleAccounts}`)
     return multipleAccounts
-      ? rank.split(', ').map((x) => ({ name: /(^[^:]+)/.exec(x)[0], sr: /([0-9^ ]+$)/.exec(x)[0] }))
+      ? rank.split(', ')
+        .map((x) => ({
+          name: /(^[^:]+)/.exec(x)[0],
+          sr: Number(/([0-9^ ]+$)/.exec(x)[0])
+        }))
+          .sort((x, y) => x.name > y.name)
       : Number(rank)
   },
   async lastMatch (key) {
@@ -40,6 +45,14 @@ const ot = module.exports = {
 }
 
 if (!module.parent) {
-  if (process.argv.includes('--version') || process.argv.includes('-v')) console.log(version)
-  if (process.argv.includes('--clientVersion')) ot.clientVersion().then(({ number }) => console.log(number)).catch(console.error)
+  if (process.argv.includes('--version') || process.argv.includes('-v')) {
+    console.log(version)
+  }
+  if (process.argv.includes('--clientVersion')) {
+    ot.clientVersion().then(({ number }) => console.log(number)).catch(console.error)
+  }
+  if (process.argv.includes('--sr')) {
+    const key = process.argv[process.argv.indexOf('--sr') + 1]
+    ot.sr(key, { multipleAccounts: true }).then(console.log).catch(console.error)
+  }
 }
