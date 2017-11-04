@@ -24,15 +24,14 @@ I plan on writing better docs before release.
 ## Methods
 ###### NOTE
 **All methods return Promises**
-##### [ot.player(key)](#ot.player)
-##### [ot.sr(key[, options])](#ot.sr)
-##### [ot.clientVersion()](#ot.clientVersion)
-##### [ot.lastMatch(key)](#ot.lastMatch)
+##### [ot.player(key)](#otplayer)
+##### [ot.sr(key[, options])](#otsr)
+##### [ot.clientVersion()](#otclientversion)
+##### [ot.lastMatch(key)](#otlastmatch)
 
 <hr>
 
-### `ot.player`
-##### `ot.player(key)`
+### `ot.player(key)`
 ##### Returns: [Simple game object.](#simple)
 ##### Example:
 ```js
@@ -48,8 +47,7 @@ ot.player('eeveea')
 
 <hr>
 
-### `ot.sr`
-##### `ot.sr(key[, options])`
+### `ot.sr(key[, options])`
 ##### `options`
 * **multipleAccounts:** `Boolean` Default: `false`
 
@@ -78,8 +76,7 @@ ot.sr('eeveea', { multipleAccounts: true })
 
 <hr>
 
-### `ot.clientVersion`
-##### `ot.clientVersion()`
+### `ot.clientVersion()`
 ##### Returns: `Object`
 ```js
 {
@@ -96,8 +93,7 @@ ot.clientVersion()
 
 <hr>
 
-### `ot.lastMatch`
-##### `ot.lastMatch(key)`
+### `ot.lastMatch(key)`
 ###### NOTE
 Some fields may be null.
 ##### ~~Returns: [Simple game object.](#simple)~~
@@ -120,7 +116,7 @@ ot.lastMatch('eeveea')
 
 * `detailed`
  * Function, Returns: Promise<[Detailed game object](#detailed)>
-* [`heroesPlayed`](#heroesPlayed)
+* [`heroesPlayed`](#heroesplayed)
 * [`map`](#map)
 * [`misc`](#misc)
 * [`result`](#result)
@@ -130,12 +126,12 @@ ot.lastMatch('eeveea')
 
 ### `detailed`
 
-* [`heroStatistics`](#heroStatistics)
-* [`heroesPlayed`](#heroesPlayed)
+* [`heroStatistics`](#herostatistics)
+* [`heroesPlayed`](#heroesplayed)
 * [`killfeed`](#killfeed)
 * [`map`](#map)
 * [`misc`](#misc)
-* [`objectiveStages`](#objectiveStages)
+* [`objectiveStages`](#objectivestages)
 * [`result`](#result)
 * [`season`](#season)
 * [`sr`](#sr)
