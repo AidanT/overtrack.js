@@ -24,7 +24,7 @@ ot.player('eeveea')
 I plan on writing better docs before release.
 ## Methods
 ###### NOTE
-<!-- **All methods return Promises** -->
+All methods return Promises
 
 [ot.player(key)](#otplayerkey)<br>
 [ot.sr(key[, options])](#otsrkey-options)<br>
@@ -33,7 +33,7 @@ I plan on writing better docs before release.
 
 <hr>
 
-### `player(key)`
+### `ot.player(key)`
 ##### Returns: [Simple game object.](#simple)
 ##### Example:
 ```js
@@ -49,7 +49,7 @@ ot.player('eeveea')
 
 <hr>
 
-### `sr(key[, options])`
+### `ot.sr(key[, options])`
 ##### `options`
 * **multipleAccounts:** `Boolean` Default: `false`
 
