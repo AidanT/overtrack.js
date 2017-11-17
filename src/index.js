@@ -1,6 +1,9 @@
 const _api = require('./api')
-const _detailed = require('./structures/detailed')
-const _simple = require('./structures/simple')
+// const _detailed = require('./structures/detailed')
+// const _simple = require('./structures/simple')
+// const SimpleGame = require('./structures/simpleGame')
+const Game = require('./structures/game')
+const Games = require('./structures/games')
 const _lastMatch = require('./structures/lastMatch')
 const { version } = require('../package')
 
@@ -8,13 +11,14 @@ const { version } = require('../package')
 
 const ot = module.exports = {
   async player (key) {
-    const res = await _api(`/games/${key}`)
-    return res.games.map(game => Object.assign(_simple(game), {
-      async detailed () {
-        const json = await _api(game.url)
-        return _detailed(json, game)
-      }
-    }))
+    const { games } = await _api(`/games/${key}`)
+    // return games.games.map(game => Object.assign(_simple(game), {
+    //   async detailed () {
+    //     const json = await _api(game.url)
+    //     return _detailed(json, game)
+    //   }
+    // }))
+    return new Games(games)
   },
   async clientVersion () {
     const message = await _api('/client_version')
@@ -37,7 +41,7 @@ const ot = module.exports = {
     return Object.assign(game, {
       async detailed () {
         const json = await _api(game.misc.json)
-        return _detailed(json, game)
+        return new Game(json, game)
       }
     })
   },
@@ -54,5 +58,9 @@ if (!module.parent) {
   if (process.argv.includes('--sr')) {
     const key = process.argv[process.argv.indexOf('--sr') + 1]
     ot.sr(key, { multipleAccounts: true }).then(console.log).catch(console.error)
+  }
+  if (process.argv.includes('--player') && process.argv[process.argv.indexOf('--player') + 1]) {
+    const player = process.argv[process.argv.indexOf('--player') + 1]
+    ot.player(player).then(console.log).catch(console.error)
   }
 }

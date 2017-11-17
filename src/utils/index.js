@@ -12,7 +12,15 @@ const _heroSpecific = (json, hero) => {
   return arr
 }
 
+exports._heroesPlayed = (game) => game.heroes_played.map(x => {
+  return {
+    hero: x[0],
+    percent: x[1]
+  }
+}).sort((x, y) => y.percent - x.percent)
+
 exports._heroStatistics = (game) => {
+  console.log(game)
   const hero = game.hero_statistics
   const result = {}
   if (hero.ALL) {
@@ -34,13 +42,6 @@ exports._heroStatistics = (game) => {
   })
   return result
 }
-
-exports._heroesPlayed = (game) => game.heroes_played.map(x => {
-  return {
-    hero: x[0],
-    percent: x[1]
-  }
-}).sort((x, y) => y.percent - x.percent)
 
 exports._killfeed = game => game.killfeed.map(x => {
   const resurrect = Boolean(x[1] & 2)
