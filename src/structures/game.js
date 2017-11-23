@@ -1,8 +1,7 @@
 const utils = require('../utils')
 
-class Game extends Object {
+class Game {
   constructor (game, simple) {
-    super()
     this.heroStatistics = utils._heroStatistics(game)
     this.heroesPlayed = utils._heroesPlayed(game)
     this.killfeed = utils._killfeed(game)

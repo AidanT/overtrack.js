@@ -9,43 +9,41 @@ const { version } = require('../package')
 
 // NOTE: Detailed will return a 404 if viewable is false
 
-const ot = module.exports = {
-  async player (key) {
-    const { games } = await _api(`/games/${key}`)
-    // return games.games.map(game => Object.assign(_simple(game), {
-    //   async detailed () {
-    //     const json = await _api(game.url)
-    //     return _detailed(json, game)
-    //   }
-    // }))
-    return new Games(games)
-  },
-  async clientVersion () {
-    const message = await _api('/client_version')
-    return { message, number: message.slice(29) }
-  },
-  async sr (key, { multipleAccounts } = { multipleAccounts: false }) {
-    const rank = await _api(`/sr/${key}?multiple_accounts=${multipleAccounts}`)
-    return multipleAccounts
-      ? rank.split(', ')
-        .map((x) => ({
-          name: /(^[^:]+)/.exec(x)[0],
-          sr: Number(/([0-9^ ]+$)/.exec(x)[0])
-        }))
-          .sort((x, y) => x.name > y.name)
-      : Number(rank)
-  },
-  async lastMatch (key) {
-    const message = await _api(`/last_match/${key}`)
-    const game = _lastMatch(message)
-    return Object.assign(game, {
-      async detailed () {
-        const json = await _api(game.misc.json)
-        return new Game(json, game)
-      }
-    })
-  },
-  version
+const ot = module.exports = async (key) => {
+  const { games } = await _api(`/games/${key}`)
+  return new Games(games)
+}
+
+ot.version = version
+
+ot.clientVersion = async () => {
+  const message = await _api('/client_version')
+  return { message, number: message.slice(29) }
+}
+
+ot.sr = async (key, { multipleAccounts } = { multipleAccounts: false }) => {
+  const rank = await _api(`/sr/${key}?multiple_accounts=${multipleAccounts}`)
+  if (multipleAccounts) {
+    const ranks = rank.split(',')
+    .map((x) => ({
+      name: /(^[^:]+)/.exec(x)[0],
+      sr: Number(/([0-9^ ]+$)/.exec(x)[0])
+    }))
+    return ranks
+  } else {
+    return Number(rank)
+  }
+}
+
+ot.lastMatch = async (key) => {
+  const message = await _api(`/last_match/${key}`)
+  const game = _lastMatch(message)
+  return Object.assign(game, {
+    async detailed () {
+      const json = await _api(game.misc.json)
+      return new Game(json, game)
+    }
+  })
 }
 
 if (!module.parent) {
@@ -61,6 +59,10 @@ if (!module.parent) {
   }
   if (process.argv.includes('--player') && process.argv[process.argv.indexOf('--player') + 1]) {
     const player = process.argv[process.argv.indexOf('--player') + 1]
-    ot.player(player).then(console.log).catch(console.error)
+    ot(player).then(console.log).catch(console.error)
+  }
+  if (process.argv.includes('--lastMatch') && process.argv[process.argv.indexOf('--lastMatch') + 1]) {
+    const player = process.argv[process.argv.indexOf('--lastMatch') + 1]
+    ot.lastMatch(player).then(console.log).catch(console.error)
   }
 }
