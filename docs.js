@@ -5,9 +5,9 @@ const { name } = require('./package.json')
 
 const config = {
   app: {
+    base: 'overtrack.js',
     entrance: 'api',
     routing: 'query',
-    // server: Docma.ServerType.STATIC,
     server: Docma.ServerType.GITHUB,
     title: name
   },
