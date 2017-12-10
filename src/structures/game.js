@@ -1,6 +1,12 @@
 const utils = require('../utils')
 
+/**
+ * @typedef {Object} Game
+ * @inner
+*/
+
 class Game {
+  /** @private */
   constructor (game, simple) {
     this.heroStatistics = utils._heroStatistics(game)
     this.heroesPlayed = utils._heroesPlayed(game)

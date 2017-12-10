@@ -1,6 +1,17 @@
 const GamePreview = require('./gamePreview')
 
+/**
+ * @typedef {GamePreview[]} Games - {@link #GamePreview}
+ * @property {Object} average - Average stats of all games
+ * @property {Object} average.sr
+ * @property {Number} average.sr.start Average starting sr
+ * @property {Number} average.sr.end Average sr
+ * @property {Number} average.sr.diff Diffrence between `start` and `end` sr
+ * @inner
+*/
+
 class Games extends Array {
+  /** @private */
   constructor (games) {
     super()
     this.average = { sr: { start: 0, end: 0, games: 0 } }

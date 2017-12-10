@@ -3,7 +3,8 @@
   "version": "0.4.0-alpha",
   "scripts": {
     "start": "node tests/main.js",
-    "prepack": "node tests"
+    "prepack": "node tests",
+    "docs": "node docs.js"
   },
   "description": "A node wrapper for OverTrack",
   "main": "src/index.js",
@@ -25,6 +26,7 @@
     "axios": "^0.16.2"
   },
   "devDependencies": {
+    "docma": "^1.5.2",
     "mocha": "^4.0.1"
   },
   "engines": {

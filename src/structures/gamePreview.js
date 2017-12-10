@@ -2,7 +2,13 @@ const Game = require('./game')
 const _api = require('../api')
 const utils = require('../utils')
 
+/**
+ * @typedef {Object} GamePreview
+ * @inner
+*/
+
 class GamePreview {
+  /** @private */
   constructor (game) {
     this.heroesPlayed = utils._heroesPlayed(game)
     this.map = utils._map(game)
@@ -13,6 +19,11 @@ class GamePreview {
     this.time = utils._time(game)
   }
 
+  /**
+   * @async
+   * @method GamePreview.detailed
+   * @returns {Promise<Game>}
+  */
   async detailed () {
     const game = await _api(this.misc.json)
     return new Game(game, this)
