@@ -1,4 +1,4 @@
-const GamePreview = require('./gamePreview')
+const GamePreview = require('./game-preview')
 
 class Games extends Array {
   constructor (games) {
@@ -9,7 +9,7 @@ class Games extends Array {
       if (this[i].sr.start && this[i].sr.end) {
         this.average.sr.start += this[i].sr.start
         this.average.sr.end += this[i].sr.end
-        this.average.sr.games ++
+        this.average.sr.games++
       }
     })
     this.average = {
