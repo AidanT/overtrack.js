@@ -1,10 +1,7 @@
 const _api = require('./api')
-// const _detailed = require('./structures/detailed')
-// const _simple = require('./structures/simple')
-// const SimpleGame = require('./structures/simpleGame')
 const Game = require('./structures/game')
 const Games = require('./structures/games')
-const _lastMatch = require('./structures/lastMatch')
+const _lastMatch = require('./structures/last-match')
 const { version } = require('../package')
 
 // NOTE: Detailed will return a 404 if viewable is false
@@ -25,10 +22,10 @@ ot.sr = async (key, { multipleAccounts } = { multipleAccounts: false }) => {
   const rank = await _api(`/sr/${key}?multiple_accounts=${multipleAccounts}`)
   if (multipleAccounts) {
     const ranks = rank.split(',')
-    .map((x) => ({
-      name: /(^[^:]+)/.exec(x)[0],
-      sr: Number(/([0-9^ ]+$)/.exec(x)[0])
-    }))
+      .map((x) => ({
+        name: /(^[^:]+)/.exec(x)[0],
+        sr: Number(/([0-9^ ]+$)/.exec(x)[0])
+      }))
     return ranks
   } else {
     return Number(rank)
@@ -47,22 +44,36 @@ ot.lastMatch = async (key) => {
 }
 
 if (!module.parent) {
-  if (process.argv.includes('--version') || process.argv.includes('-v')) {
-    console.log(version)
-  }
-  if (process.argv.includes('--clientVersion')) {
-    ot.clientVersion().then(({ number }) => console.log(number)).catch(console.error)
-  }
-  if (process.argv.includes('--sr')) {
-    const key = process.argv[process.argv.indexOf('--sr') + 1]
-    ot.sr(key, { multipleAccounts: true }).then(console.log).catch(console.error)
-  }
-  if (process.argv.includes('--player') && process.argv[process.argv.indexOf('--player') + 1]) {
-    const player = process.argv[process.argv.indexOf('--player') + 1]
-    ot(player).then(console.log).catch(console.error)
-  }
-  if (process.argv.includes('--lastMatch') && process.argv[process.argv.indexOf('--lastMatch') + 1]) {
-    const player = process.argv[process.argv.indexOf('--lastMatch') + 1]
-    ot.lastMatch(player).then(console.log).catch(console.error)
-  }
+  const vm = require('vm')
+  const context = {}
+  Object.defineProperties(context, {
+    ot: {
+      value: ot,
+      enumerable: true
+    },
+    global: {
+      value: context
+    }
+  })
+  vm.createContext(context)
+  process.stdin.resume()
+  const prompt = () => process.stdout.write('> ')
+  process.stdin.on('data', (data) => {
+    data = data.toString('utf8')
+    try {
+      const result = vm.runInContext(data, context)
+      if (result instanceof Promise) {
+        result
+          .then(console.log, console.error)
+          .then(prompt)
+      } else {
+        console.log(result)
+        prompt()
+      }
+    } catch (error) {
+      console.error(error)
+      prompt()
+    }
+  })
+  prompt()
 }
